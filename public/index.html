@@ -1,2 +1,27 @@
-index static page
-<h1>Hello world</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Planet war</title>
+
+    <!-- CDN Css -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+</head>
+<body>
+    <div id="debug" data-bind='with: debugViewModel'>
+        <h3>Debug:</h3>
+        <span data-bind="text: rawdata"></span>
+    </div>
+    <div id="content">
+        <h1>Content</h1>
+    </div>
+
+    <!-- CDN Javascript -->
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
+    <!-- internal scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

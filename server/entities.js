@@ -1,5 +1,4 @@
 var uuid = require('node-uuid');
-var Position = require('/position');
 
 function Position(x, y) {
     var self = this;
@@ -9,6 +8,7 @@ function Position(x, y) {
 };
 
 function Planet(config) {
+    config = config || {};
     var self = this;
 
     self.id = config.id || uuid.v4();
