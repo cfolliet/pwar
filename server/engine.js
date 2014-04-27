@@ -1,6 +1,7 @@
 var entities = require('./entities.js');
 var _ = require('underscore');
 
+var travelSpeed = 10; // move on x and y axis by minute
 var game = new Game();
 
 function Game(config) {
@@ -44,21 +45,45 @@ function Game(config) {
             endPlanetId: endPlanetId,
             shipCount: shipCount
         });
+        setTimeout(endMove, getTimeTravel(startPlanet.position, endPlanet.position), move);
         self.moves.push(move);
         return move;
     };
+
+    function getPlayer(id) {
+        return _.find(game.players, function (player) {
+            return player.id == id;
+        });
+    };
+
+    function getPlanet(id) {
+        return _.find(game.planets, function (planet) {
+            return planet.id == id;
+        });
+    };
+
+    // returns the time to go from pos1 to pos2 in ms
+    function getTimeTravel(position1, position2) {
+        var distanceX = Math.abs(position1.x - position2.x);
+        var distanceY = Math.abs(position1.y - position2.y);
+        var maxDistance = Math.max(distanceX, distanceY);
+
+        return maxDistance * travelSpeed / 60 / 1000;
+    };
+
+    function endMove(move) {
+        var endPlanet = getPlanet(move.endPlanetId);
+
+        if (move.ownerPlayerId == endPlanet.ownerPlayerId) {
+            endPlanet.capacityUsed = Math.max(endPlanet.capacityUsed + move.shipCount, endPlanet.maxCapacity);
+        } else if (endPlanet.capacityUsed > move.shipCount) {
+            endPlanet.capacityUsed -= move.shipCount;
+        }
+        else {
+            endPlanet.ownerPlayerId = move.ownerPlayerId;
+            endPlanet.capacityUsed = Math.max(Math.abs(endPlanet.capacityUsed - move.shipCount), endPlanet.maxCapacity);
+        }
+    };
 }
-
-function getPlayer(id) {
-    return _.find(game.players, function (player) {
-        return player.id == id;
-    });
-};
-
-function getPlanet(id) {
-    return _.find(game.planets, function (planet) {
-        return planet.id == id;
-    });
-};
 
 exports.game = game;
