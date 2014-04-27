@@ -9,7 +9,9 @@ function Game(config) {
 
     self.planets = config.planets || [];
     self.players = config.players || [];
+    self.moves = config.moves || [];
     self.addPlayer = addPlayer;
+    self.addMove = addMove;
 
     init();
 
@@ -28,6 +30,22 @@ function Game(config) {
         var player = new entities.Player({ name: name });
         self.players.push(player);
         return player;
+    };
+
+    function addMove(startPlanetId, endPlanetId, shipCount) {
+        var startPlanet = getPlanet(startPlanetId);
+        var endPlanet = getPlanet(endPlanetId);
+
+        startPlanet.capacityUsed -= shipCount;
+
+        var move = new entities.Move({
+            ownerPlayerId: startPlanet.ownerPlayerId,
+            startPlanetId: startPlanetId,
+            endPlanetId: endPlanetId,
+            shipCount: shipCount
+        });
+        self.moves.push(move);
+        return move;
     };
 }
 

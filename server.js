@@ -22,8 +22,9 @@ app.route('/players')
 });
 
 app.route('/moves')
-.post(function () {
-    // TODO
+.post(function (req, res) {
+    res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, req.body.shipCount));
+    updateClients();
 });
 
 io.sockets.on('connection', function (socket) {

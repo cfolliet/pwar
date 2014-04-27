@@ -20,7 +20,6 @@ function Planet(config) {
 };
 
 function Player(config) {
-    console.log(config);
     config = config || {};
     var self = this;
 
@@ -28,6 +27,18 @@ function Player(config) {
     self.name = config.name || "no name";
 }
 
+function Move(config) {
+    config = config || {};
+    var self = this;
+
+    self.ownerPlayerId = config.ownerPlayerId;
+    self.shipCount = config.shipCount;
+    self.startPlanetId = config.startPlanetId;
+    self.endPlanetId = config.endPlanetId;
+    self.startDate = config.startDate || new Date();
+};
+
 exports.Planet = Planet;
 exports.Player = Player;
 exports.Position = Position;
+exports.Move = Move;
