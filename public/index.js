@@ -7,14 +7,14 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
     pw.socketIO = io.connect(host);
 
     pw.socketIO.on('game', function (game) {
-        pw.debugViewModel.rawdata(JSON.stringify(game));
+        pw.debugViewModel.game(game);
     });
 })(pwar);
 
 // debugger
 (function (pw) {
     pw.debugViewModel = {
-        rawdata: ko.observable()
+        game: ko.observable()
     };
 })(pwar);
 
