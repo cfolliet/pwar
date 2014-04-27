@@ -19,4 +19,14 @@ function Planet(config) {
     self.capacityUsed = config.capacityUsed || 0;
 };
 
+function Player(config) {
+    console.log(config);
+    config = config || {};
+    var self = this;
+
+    self.id = config.id || uuid.v4();
+    self.name = config.name || "no name";
+}
+
 exports.Planet = Planet;
+exports.Player = Player;

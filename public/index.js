@@ -6,8 +6,8 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
 (function (pw) {
     pw.socketIO = io.connect(host);
 
-    pw.socketIO.on('planets', function (planets) {
-        pw.debugViewModel.rawdata(JSON.stringify(planets));
+    pw.socketIO.on('game', function (game) {
+        pw.debugViewModel.rawdata(JSON.stringify(game));
     });
 })(pwar);
 
@@ -16,6 +16,20 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
     pw.debugViewModel = {
         rawdata: ko.observable()
     };
+})(pwar);
+
+// game
+(function (pw) {
+    pw.gameViewModel = function () {
+
+        function createPlayer() {
+            console.log('create player'); // TODO call the web api
+        };
+
+        return {
+            createPlayer: createPlayer
+        }
+    }
 })(pwar);
 
 
