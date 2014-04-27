@@ -30,3 +30,4 @@ function Player(config) {
 
 exports.Planet = Planet;
 exports.Player = Player;
+exports.Position = Position;

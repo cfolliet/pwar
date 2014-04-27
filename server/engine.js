@@ -1,4 +1,7 @@
 var entities = require('./entities.js');
+var _ = require('underscore');
+
+var game = new Game();
 
 function Game(config) {
     config = config || {};
@@ -14,7 +17,8 @@ function Game(config) {
         // init planets map
         // TODO choose the way we get the map (random generate/save in db)
         if (self.planets.length == 0) {
-            self.planets.push(new entities.Planet());
+            self.planets.push(new entities.Planet({ position: new entities.Position(-50, -50) }));
+            self.planets.push(new entities.Planet({ position: new entities.Position(50, 50) }));
         }
 
         // ... future init stuff
@@ -28,7 +32,15 @@ function Game(config) {
 }
 
 function getPlayer(id) {
-    throw new Error('not implemented');
+    return _.find(game.players, function (player) {
+        return player.id == id;
+    });
 };
 
-exports.game = new Game();
+function getPlanet(id) {
+    return _.find(game.planets, function (planet) {
+        return planet.id == id;
+    });
+};
+
+exports.game = game;
