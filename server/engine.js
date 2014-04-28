@@ -1,7 +1,6 @@
 var entities = require('./entities.js');
 var _ = require('underscore');
 
-var travelSpeed = 10; // move on x and y axis by minute
 var game = new Game();
 
 function Game(config) {
@@ -20,8 +19,8 @@ function Game(config) {
         // init planets map
         // TODO choose the way we get the map (random generate/save in db)
         if (self.planets.length == 0) {
-            self.planets.push(new entities.Planet({ position: new entities.Position(-50, -50) }));
-            self.planets.push(new entities.Planet({ position: new entities.Position(50, 50) }));
+            self.planets.push(new entities.Planet());
+            self.planets.push(new entities.Planet());
         }
 
         // ... future init stuff
@@ -37,7 +36,7 @@ function Game(config) {
         var startPlanet = getPlanet(startPlanetId);
         var endPlanet = getPlanet(endPlanetId);
 
-        startPlanet.capacityUsed -= shipCount;
+        startPlanet.shipCount -= shipCount;
 
         var move = new entities.Move({
             ownerPlayerId: startPlanet.ownerPlayerId,
@@ -68,20 +67,20 @@ function Game(config) {
         var distanceY = Math.abs(position1.y - position2.y);
         var maxDistance = Math.max(distanceX, distanceY);
 
-        return maxDistance * travelSpeed / 60 / 1000;
+        return maxDistance * 1000;
     };
 
     function endMove(move) {
         var endPlanet = getPlanet(move.endPlanetId);
 
         if (move.ownerPlayerId == endPlanet.ownerPlayerId) {
-            endPlanet.capacityUsed = Math.max(endPlanet.capacityUsed + move.shipCount, endPlanet.maxCapacity);
-        } else if (endPlanet.capacityUsed > move.shipCount) {
-            endPlanet.capacityUsed -= move.shipCount;
+            endPlanet.shipCount = endPlanet.shipCount + move.shipCount;
+        } else if (endPlanet.shipCount > move.shipCount) {
+            endPlanet.shipCount -= move.shipCount;
         }
         else {
             endPlanet.ownerPlayerId = move.ownerPlayerId;
-            endPlanet.capacityUsed = Math.max(Math.abs(endPlanet.capacityUsed - move.shipCount), endPlanet.maxCapacity);
+            endPlanet.shipCount = Math.abs(endPlanet.shipCount - move.shipCount);
         }
     };
 }

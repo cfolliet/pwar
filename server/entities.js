@@ -1,4 +1,5 @@
 var uuid = require('node-uuid');
+var _ = require('underscore');
 
 function Position(x, y) {
     var self = this;
@@ -12,11 +13,11 @@ function Planet(config) {
     var self = this;
 
     self.id = config.id || uuid.v4();
-    self.position = config.position || new Position(0, 0);
+    self.position = config.position || new Position(_.random(-500, 500), _.random(-500, 500));
 
     self.ownerPlayerId = config.ownerPlayerId || null;
-    self.maxCapacity = config.maxCapacity || 100;
-    self.capacityUsed = config.capacityUsed || 0;
+    self.size = config.size || _.random(10, 100);
+    self.shipCount = config.shipCount || _.random(100);
 };
 
 function Player(config) {
