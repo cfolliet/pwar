@@ -1,5 +1,8 @@
-Pour installer les dépendances :
-shift + click droit --> Ouvrir une fenêtre des commandes ici
+Pour installer les dÃ©pendances :
+shift + click droit --> Ouvrir une fenÃªtre des commandes ici
 Taper "npm install" entrer...
 
-Les modules seront télécharger dans le dossier node_modules
+Les modules seront tÃ©lÃ©charger dans le dossier node_modules
+
+Pour lancer le serveur:
+Taper "node server"
