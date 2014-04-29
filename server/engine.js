@@ -23,7 +23,7 @@ function Game(config) {
             self.planets.push(new entities.Planet());
         }
 
-        // ... future init stuff
+        setInterval(planetsGrowth, 1000);
     };
 
     function addPlayer(name) {
@@ -82,6 +82,12 @@ function Game(config) {
             endPlanet.ownerPlayerId = move.ownerPlayerId;
             endPlanet.shipCount = Math.abs(endPlanet.shipCount - move.shipCount);
         }
+    };
+
+    function planetsGrowth() {
+        self.planets.forEach(function (planet) {
+            planet.shipCount += planet.size / 10;
+        });
     };
 }
 
