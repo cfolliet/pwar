@@ -12,25 +12,28 @@
         <h3>Debug:</h3>
         <h4>planets</h4>
         <ul data-bind="foreach: planets">
-            <li>
-                id: <span data-bind="text: id"></span><br />
-                x: <span data-bind="text: position.x"></span><br />
+            <li>id: <span data-bind="text: id"></span>
+                <br />
+                x: <span data-bind="text: position.x"></span>
+                <br />
                 y: <span data-bind="text: position.y"></span>
             </li>
         </ul>
         <h4>players</h4>
         <ul data-bind="foreach: players">
-            <li>
-                id: <span data-bind="text: id"></span><br />
+            <li>id: <span data-bind="text: id"></span>
+                <br />
                 name: <span data-bind="text: name"></span>
             </li>
         </ul>
         <h4>moves</h4>
         <ul data-bind="foreach: moves">
-            <li>
-                player-id: <span data-bind="text: ownerPlayerId"></span><br />
-                ship-count: <span data-bind="text: shipCount"></span><br />
-                planet-origin: <span data-bind="text: startPlanetId"></span><br />
+            <li>player-id: <span data-bind="text: ownerPlayerId"></span>
+                <br />
+                ship-count: <span data-bind="text: shipCount"></span>
+                <br />
+                planet-origin: <span data-bind="text: startPlanetId"></span>
+                <br />
                 planet-destination: <span data-bind="text: endPlanetId"></span>
             </li>
         </ul>
@@ -38,6 +41,7 @@
     <div id="content">
         <h1>Content</h1>
         game board here...
+        <canvas id="boardCanvas" width="600" height="600"></canvas>
     </div>
 
     <!-- CDN Javascript -->
@@ -47,5 +51,7 @@
     <!-- internal scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="index.js"></script>
+    <script type="text/javascript" src="paper-full.js"></script>
+    <script type="text/paperscript" src="board.js" canvas="boardCanvas"></script>
 </body>
 </html>

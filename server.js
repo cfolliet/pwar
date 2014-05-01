@@ -15,6 +15,11 @@ app.get('/', function (req, res) {
     res.sendfile('index.html');
 });
 
+app.route('/games')
+.get(function (req, res) {
+    res.send(game);
+});
+
 app.route('/players')
 .post(function (req, res) {
     res.send(game.addPlayer(req.body.name));
@@ -34,6 +39,8 @@ io.sockets.on('connection', function (socket) {
 function updateClients() {
     io.sockets.emit('game', game);
 };
+
+setInterval(updateClients, 1000);
 
 server.listen(8080);
 console.log('Server is running...');

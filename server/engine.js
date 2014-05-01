@@ -23,7 +23,7 @@ function Game(config) {
             self.planets.push(new entities.Planet());
         }
 
-        setInterval(planetsGrowth, 1000);
+        setInterval(planetsGrowth, 3000);
     };
 
     function addPlayer(name) {

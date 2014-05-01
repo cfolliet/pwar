@@ -6,9 +6,23 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
 (function (pw) {
     pw.socketIO = io.connect(host);
 
-    pw.socketIO.on('game', function (game) {
+    pw.socketIO.on('game', update);
+
+    /*
+    setInterval(getData, 10000);
+
+    function getData() {
+        $.get(host + '/games', function (game) {
+            update(game);
+        });
+    };
+    */
+
+    function update(game) {
         pw.debugViewModel.game(game);
-    });
+        drawGame(game);
+        paper.view.draw()
+    };
 })(pwar);
 
 // debugger

@@ -13,7 +13,7 @@ function Planet(config) {
     var self = this;
 
     self.id = config.id || uuid.v4();
-    self.position = config.position || new Position(_.random(-500, 500), _.random(-500, 500));
+    self.position = config.position || new Position(_.random(100, 500), _.random(100, 500));
 
     self.ownerPlayerId = config.ownerPlayerId || null;
     self.size = config.size || _.random(10, 100);
