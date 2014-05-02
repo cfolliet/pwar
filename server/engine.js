@@ -44,7 +44,8 @@ function Game(config) {
             endPlanetId: endPlanetId,
             shipCount: shipCount
         });
-        setTimeout(endMove, getTimeTravel(startPlanet.position, endPlanet.position), move);
+        var timeTravel = getTimeTravel(startPlanet.position, endPlanet.position);
+        setTimeout(endMove, timeTravel, move);
         self.moves.push(move);
         return move;
     };
@@ -67,14 +68,14 @@ function Game(config) {
         var distanceY = Math.abs(position1.y - position2.y);
         var maxDistance = Math.max(distanceX, distanceY);
 
-        return maxDistance * 1000;
+        return maxDistance * 50;
     };
 
     function endMove(move) {
         var endPlanet = getPlanet(move.endPlanetId);
 
         if (move.ownerPlayerId == endPlanet.ownerPlayerId) {
-            endPlanet.shipCount = endPlanet.shipCount + move.shipCount;
+            endPlanet.shipCount += move.shipCount;
         } else if (endPlanet.shipCount > move.shipCount) {
             endPlanet.shipCount -= move.shipCount;
         }
@@ -86,7 +87,7 @@ function Game(config) {
 
     function planetsGrowth() {
         self.planets.forEach(function (planet) {
-            planet.shipCount += planet.size / 10;
+            planet.shipCount += parseInt(planet.size / 10);
         });
     };
 }

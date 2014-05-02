@@ -19,9 +19,10 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
     */
 
     function update(game) {
+        pw.gameViewModel.game(game);
         pw.debugViewModel.game(game);
         drawGame(game);
-        paper.view.draw()
+        paper.view.draw();
     };
 })(pwar);
 
@@ -35,15 +36,38 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
 // game
 (function (pw) {
     pw.gameViewModel = function () {
+        var game = ko.observable();
 
-        function createPlayer() {
-            console.log('create player'); // TODO call the web api
+        function sendMoves(startPlanetIds, endPlanetId) {
+            startPlanetIds.forEach(function (startPlanetId) {
+                var body = {
+                    startPlanetId: startPlanetId,
+                    endPlanetId: endPlanetId,
+                    shipCount: getPlanet(startPlanetId).shipCount / 2
+                };
+
+                $.post(host + '/moves', body);
+            });
+        };
+
+        function getPlanet(id) {
+            var planets = game().planets;
+            var length = planets.length;
+
+            for (var i = 0; i < length; i++) {
+                if (planets[i].id == id) {
+                    return planets[i];
+                }
+            }
+
+            return null;
         };
 
         return {
-            createPlayer: createPlayer
+            game: game,
+            sendMoves: sendMoves
         }
-    }
+    }();
 })(pwar);
 
 
