@@ -1,7 +1,7 @@
 var entities = require('./entities.js');
+var events = require('events');
+var util = require('util');
 var _ = require('underscore');
-
-var game = new Game();
 
 function Game(config) {
     config = config || {};
@@ -12,6 +12,8 @@ function Game(config) {
     self.moves = config.moves || [];
     self.addPlayer = addPlayer;
     self.addMove = addMove;
+    
+    events.EventEmitter.call(self);
 
     init();
 
@@ -83,13 +85,22 @@ function Game(config) {
             endPlanet.ownerPlayerId = move.ownerPlayerId;
             endPlanet.shipCount = Math.abs(endPlanet.shipCount - move.shipCount);
         }
+
+        self.moves = _.reject(self.moves, function (m) { return m.id == move.id });
+        self.emit('endMove');
     };
 
     function planetsGrowth() {
         self.planets.forEach(function (planet) {
             planet.shipCount += parseInt(planet.size / 10);
         });
+        self.emit('planetsGrowth');
     };
 }
+
+util.inherits(Game, events.EventEmitter);
+
+
+var game = new Game();
 
 exports.game = game;

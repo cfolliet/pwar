@@ -32,6 +32,7 @@ function Move(config) {
     config = config || {};
     var self = this;
 
+    self.id = config.id || uuid.v4();
     self.ownerPlayerId = config.ownerPlayerId;
     self.shipCount = config.shipCount;
     self.startPlanetId = config.startPlanetId;

@@ -6,6 +6,32 @@ drawGame = function (game) {
     game.planets.forEach(function (planet) {
         drawPlanet(planet);
     });
+
+    var currentMoves = project.getItems({ name: 'move' });
+    
+    game.moves.forEach(function (move) {
+        var match = null;
+
+        var length = currentMoves.length;
+        for (var i = 0; i < length; i++) {
+            if (currentMoves[i].gameId == move.id) {
+                match = currentMoves[i];
+                currentMoves.splice(i, 1);
+                break;
+            }
+        }    
+
+        if (match == null) {
+            drawMove(move);
+        }
+        else {
+        }
+    });
+
+    var length = currentMoves.length;
+    for (var i = 0; i < length; i++) {
+        currentMoves[i].remove();
+    }
 };
 
 function drawPlanet(planet) {
@@ -82,6 +108,47 @@ function rightClick(group) {
     });
 
     currentSelection = [];
+};
+
+function drawMove(move) {
+    var group = get(move.id);
+
+    if (group == null) {
+        group = initMove(move);
+    }
+};
+
+function initMove(move) {
+    var group = new Group();
+    group.name = 'move';
+    group.gameId = move.id;
+    objects.push(group);
+
+    var startPoint = get(move.startPlanetId).position;
+    var endPoint = get(move.endPlanetId).position;
+
+    circle = new Path.Circle(startPoint, 5);
+    circle.strokeColor = 'black';
+    circle.fillColor = 'yellow';
+    circle.name = 'circle';
+
+    text = new PointText(startPoint);
+    text.justification = 'center';
+    text.fillColor = 'black';
+    text.name = 'shipCount';
+    text.content = move.shipCount;
+
+    group.addChild(circle);
+    group.addChild(text);
+
+    var vector = endPoint - startPoint;
+
+    group.onFrame = function (event) {
+        vector.length = (event.delta * 1000) / 50;
+        this.position += vector;
+    };
+
+    return group;
 };
 
 function get(id) {

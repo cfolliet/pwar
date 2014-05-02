@@ -36,11 +36,12 @@ io.sockets.on('connection', function (socket) {
     socket.emit('game', game);
 });
 
+game.on('endMove', updateClients);
+game.on('planetsGrowth', updateClients);
+
 function updateClients() {
     io.sockets.emit('game', game);
 };
-
-setInterval(updateClients, 1000);
 
 server.listen(8080);
 console.log('Server is running...');
