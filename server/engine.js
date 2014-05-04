@@ -3,10 +3,13 @@ var events = require('events');
 var util = require('util');
 var _ = require('underscore');
 
+var games = [];
+
 function Game(config) {
     config = config || {};
     var self = this;
 
+    self.name = config.name || 'no name';
     self.planets = config.planets || [];
     self.players = config.players || [];
     self.moves = config.moves || [];
@@ -100,7 +103,19 @@ function Game(config) {
 
 util.inherits(Game, events.EventEmitter);
 
+function createGame(gameName, playerName) {
+    var game = new Game({ name: gameName });
+    game.addPlayer(playerName);
+    games.push(game);
+    return game;
+}
 
-var game = new Game();
+function getGame(id) {
+    return _.find(games, function (game) {
+        return game.id == id;
+    });
+};
 
-exports.game = game;
+exports.createGame = createGame;
+exports.games = games;
+exports.getGame = getGame;
