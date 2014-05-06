@@ -1,6 +1,7 @@
 var entities = require('./entities.js');
 var events = require('events');
 var util = require('util');
+var uuid = require('node-uuid');
 var _ = require('underscore');
 
 var games = [];
@@ -9,7 +10,9 @@ function Game(config) {
     config = config || {};
     var self = this;
 
+    self.id = config.id || uuid.v4();
     self.name = config.name || 'no name';
+    self.isStarted = config.isStarted || false;
     self.planets = config.planets || [];
     self.players = config.players || [];
     self.moves = config.moves || [];

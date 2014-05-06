@@ -3,7 +3,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var socketIo = require('socket.io');
 var engine = require('./server/engine.js');
-var game = engine.games[0];
 
 var app = express();
 var server = http.createServer(app);
@@ -24,10 +23,11 @@ app.route('/games')
     var gameName = req.body.name;
     var playerName = req.body.playerName;
     var game = engine.createGame(gameName, playerName);
-    game.on('endMove', updateClients);
-    game.on('planetsGrowth', updateClients);
+    game.on('endMove', updateGame);
+    game.on('planetsGrowth', updateGame);
     res.send(game);
-    updateClients();
+    updateGames(engine.games);
+    updateGame(game);
 });
 
 app.route('/players')
@@ -37,20 +37,24 @@ app.route('/players')
     var game = engine.getGame(gameId);
     game.addPlayer(playerName);
     res.send(game);
-    updateClients();
+    updateGame(game);
 });
 
 app.route('/moves')
 .post(function (req, res) {
     res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, parseInt(req.body.shipCount)));
-    updateClients();
+    updateGame();
 });
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('game', game);
+    updateGames(engine.games);
 });
 
-function updateClients(game) {
+function updateGames(games) {
+    io.sockets.emit('games', games);
+};
+
+function updateGame(game) {
     io.sockets.emit('game', game);
 };
 

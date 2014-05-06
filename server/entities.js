@@ -26,6 +26,7 @@ function Player(config) {
 
     self.id = config.id || uuid.v4();
     self.name = config.name || "no name";
+    self.isReady = config.isReady || false;
 }
 
 function Move(config) {

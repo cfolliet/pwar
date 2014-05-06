@@ -8,40 +8,69 @@
     <link href="index.css" rel="stylesheet">
 </head>
 <body oncontextmenu="return false;">
-    <div id="debug" data-bind='with: debugViewModel.game'>
-        <h3>Debug:</h3>
-        <h4>planets</h4>
-        <ul data-bind="foreach: planets">
-            <li>id: <span data-bind="text: id"></span>
-                <br />
-                x: <span data-bind="text: position.x"></span>
-                <br />
-                y: <span data-bind="text: position.y"></span>
-            </li>
-        </ul>
-        <h4>players</h4>
-        <ul data-bind="foreach: players">
-            <li>id: <span data-bind="text: id"></span>
-                <br />
-                name: <span data-bind="text: name"></span>
-            </li>
-        </ul>
-        <h4>moves</h4>
-        <ul data-bind="foreach: moves">
-            <li>player-id: <span data-bind="text: ownerPlayerId"></span>
-                <br />
-                ship-count: <span data-bind="text: shipCount"></span>
-                <br />
-                planet-origin: <span data-bind="text: startPlanetId"></span>
-                <br />
-                planet-destination: <span data-bind="text: endPlanetId"></span>
-            </li>
-        </ul>
+    <div id="debug" data-bind="with: debugViewModel.game">
+        <div data-bind="visible: isVisible">
+            <h3>Debug:</h3>
+            <h4>planets</h4>
+            <ul data-bind="foreach: planets">
+                <li>id: <span data-bind="text: id"></span>
+                    <br />
+                    x: <span data-bind="text: position.x"></span>
+                    <br />
+                    y: <span data-bind="text: position.y"></span>
+                </li>
+            </ul>
+            <h4>players</h4>
+            <ul data-bind="foreach: players">
+                <li>id: <span data-bind="text: id"></span>
+                    <br />
+                    name: <span data-bind="text: name"></span>
+                </li>
+            </ul>
+            <h4>moves</h4>
+            <ul data-bind="foreach: moves">
+                <li>player-id: <span data-bind="text: ownerPlayerId"></span>
+                    <br />
+                    ship-count: <span data-bind="text: shipCount"></span>
+                    <br />
+                    planet-origin: <span data-bind="text: startPlanetId"></span>
+                    <br />
+                    planet-destination: <span data-bind="text: endPlanetId"></span>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div id="content">
-        <h1>Content</h1>
-        game board here...
-        <canvas id="boardCanvas" width="600" height="600"></canvas>
+    <div id="lobby" data-bind="with: lobbyViewModel">
+        <div data-bind="visible: isVisible">
+            <h1>Lobby</h1>
+            Player name:
+            <input data-bind="value: playerName" placeholder="your name" />
+            <ul data-bind="foreach: games">
+                <li>
+                    <span data-bind="text: name"></span>
+                    <button data-bind="click: $parent.onJoinGame">Join game</button>
+                </li>
+            </ul>
+            <input type="text" data-bind="value: createGameName" placeholder="game name" />
+            <button data-bind="click: onCreateGame">Create game</button>
+        </div>
+    </div>
+    <div id="game" data-bind="with: gameViewModel">
+        <div data-bind="visible: isVisible">
+            <div data-bind="visible: !isStarted()">
+                <h1>Waiting fo players...</h1>
+                <ul data-bind="foreach: players">
+                    <li>
+                        <span data-bind="text: name"></span>
+                    </li>
+                </ul>
+            </div>
+            <div data-bind="visible: isStarted">
+                <h1>Content</h1>
+                game board here...
+                <canvas id="boardCanvas" width="600" height="600"></canvas>
+            </div>
+        </div>
     </div>
 
     <!-- CDN Javascript -->
@@ -51,7 +80,7 @@
     <!-- internal scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="index.js"></script>
-    <script type="text/javascript" src="paper-full.js"></script>
-    <script type="text/paperscript" src="board.js" canvas="boardCanvas"></script>
+    <!--<script type="text/javascript" src="paper-full.js"></script>-->
+    <!--<script type="text/paperscript" src="board.js" canvas="boardCanvas"></script>-->
 </body>
 </html>
