@@ -17,6 +17,7 @@ function Game(config) {
     self.players = config.players || [];
     self.moves = config.moves || [];
     self.addPlayer = addPlayer;
+    self.setReady = setReady;
     self.addMove = addMove;
     
     events.EventEmitter.call(self);
@@ -30,14 +31,26 @@ function Game(config) {
             self.planets.push(new entities.Planet());
             self.planets.push(new entities.Planet());
         }
-
-        setInterval(planetsGrowth, 3000);
     };
 
     function addPlayer(name) {
         var player = new entities.Player({ name: name });
         self.players.push(player);
         return player;
+    };
+    
+    function setReady(playerId) {
+        var player = getPlayer(playerId);
+        player.isReady = true;
+        
+        var allReady = self.players.every(function (p) {
+            return p.isReady;
+        });
+
+        if (allReady) {
+            self.isStarted = true;
+            setInterval(planetsGrowth, 3000);
+        }
     };
 
     function addMove(startPlanetId, endPlanetId, shipCount) {
@@ -59,13 +72,13 @@ function Game(config) {
     };
 
     function getPlayer(id) {
-        return _.find(game.players, function (player) {
+        return _.find(self.players, function (player) {
             return player.id == id;
         });
     };
 
     function getPlanet(id) {
-        return _.find(game.planets, function (planet) {
+        return _.find(self.planets, function (planet) {
             return planet.id == id;
         });
     };

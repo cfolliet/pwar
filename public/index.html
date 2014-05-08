@@ -64,6 +64,7 @@
                         <span data-bind="text: name"></span>
                     </li>
                 </ul>
+                <button data-bind="click: onReady">Ready...</button>
             </div>
             <div data-bind="visible: isStarted">
                 <h1>Content</h1>
@@ -80,7 +81,7 @@
     <!-- internal scripts -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="index.js"></script>
-    <!--<script type="text/javascript" src="paper-full.js"></script>-->
-    <!--<script type="text/paperscript" src="board.js" canvas="boardCanvas"></script>-->
+    <script type="text/javascript" src="paper-full.js"></script>
+    <script type="text/paperscript" src="board.js" canvas="boardCanvas"></script>
 </body>
 </html>

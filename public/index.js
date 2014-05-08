@@ -14,10 +14,10 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
     }
 
     function updateGame(game) {
-        //pw.gameViewModel.game(game);
+        pw.gameViewModel.game(game);
         //pw.debugViewModel.game(game);
-        //drawGame(game);
-        //paper.view.draw();
+        drawGame(game);
+        paper.view.draw();
     };
 })(pwar);
 
@@ -39,6 +39,7 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
         function onCreateGame() {
             $.post(host + '/games', { name: createGameName(), playerName: playerName() }, function (game) {
                 isVisible(false);
+                pw.gameViewModel.currentPlayerId(game.players[0].id);
                 pw.gameViewModel.game(game);
                 pw.gameViewModel.isVisible(true);
             });
@@ -47,6 +48,7 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
         function onJoinGame(game, event) {
             $.post(host + '/players', { gameId: game.id, name: playerName() }, function (game) {
                 isVisible(false);
+                pw.gameViewModel.currentPlayerId(game.players[game.players.length - 1].id);
                 pw.gameViewModel.game(game);
                 pw.gameViewModel.isVisible(true);
             });
@@ -68,12 +70,24 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
     pw.gameViewModel = function () {
         var isVisible = ko.observable(false);
         var game = ko.observable(null);
+        var currentPlayerId = ko.observable(null);
         var isStarted = ko.computed(function () {
             return game() != null && game().isStarted;
         });
         var players = ko.computed(function () {
             return game() != null ? game().players : [];
         });
+
+        function onReady() {
+            $.ajax({
+                type: "PUT",
+                url: host + '/players',
+                data: { gameId: game().id, playerId: currentPlayerId() },
+                success: function (game) {
+                    pw.gameViewModel.game(game);
+                }
+            });
+        };
 
         function sendMoves(startPlanetIds, endPlanetId) {
             startPlanetIds.forEach(function (startPlanetId) {
@@ -102,6 +116,8 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
 
         return {
             isVisible: isVisible,
+            currentPlayerId: currentPlayerId,
+            onReady: onReady,
             isStarted: isStarted,
             players : players,
             game: game,

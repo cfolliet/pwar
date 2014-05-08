@@ -27,7 +27,6 @@ app.route('/games')
     game.on('planetsGrowth', updateGame);
     res.send(game);
     updateGames(engine.games);
-    updateGame(game);
 });
 
 app.route('/players')
@@ -38,12 +37,21 @@ app.route('/players')
     game.addPlayer(playerName);
     res.send(game);
     updateGame(game);
+})
+.put(function (req, res) {
+    var gameId = req.body.gameId;
+    var playerId = req.body.playerId;
+    var game = engine.getGame(gameId);
+    game.setReady(playerId);
+    res.send(game);
+    updateGame(game);
 });
 
 app.route('/moves')
 .post(function (req, res) {
-    res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, parseInt(req.body.shipCount)));
-    updateGame();
+    // todo get the game to use code below
+    //res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, parseInt(req.body.shipCount)));
+    //updateGame();
 });
 
 io.sockets.on('connection', function (socket) {
