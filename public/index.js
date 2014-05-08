@@ -92,6 +92,8 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
         function sendMoves(startPlanetIds, endPlanetId) {
             startPlanetIds.forEach(function (startPlanetId) {
                 var body = {
+                    gameId: game().id,
+                    playerId: currentPlayerId(),
                     startPlanetId: startPlanetId,
                     endPlanetId: endPlanetId,
                     shipCount: getPlanet(startPlanetId).shipCount / 2

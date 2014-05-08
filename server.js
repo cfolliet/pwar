@@ -49,9 +49,11 @@ app.route('/players')
 
 app.route('/moves')
 .post(function (req, res) {
-    // todo get the game to use code below
-    //res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, parseInt(req.body.shipCount)));
-    //updateGame();
+    var gameId = req.body.gameId;
+    var playerId = req.body.playerId;
+    var game = engine.getGame(gameId);
+    res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, parseInt(req.body.shipCount)));
+    updateGame(game);
 });
 
 io.sockets.on('connection', function (socket) {

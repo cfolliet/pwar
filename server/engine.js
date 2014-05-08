@@ -106,14 +106,14 @@ function Game(config) {
         }
 
         self.moves = _.reject(self.moves, function (m) { return m.id == move.id });
-        self.emit('endMove');
+        self.emit('endMove', self);
     };
 
     function planetsGrowth() {
         self.planets.forEach(function (planet) {
             planet.shipCount += parseInt(planet.size / 10);
         });
-        self.emit('planetsGrowth');
+        self.emit('planetsGrowth', self);
     };
 }
 
