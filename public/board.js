@@ -1,14 +1,20 @@
 var objects = [];
 var game = pwar.gameViewModel;
 var currentSelection = [];
+var playerColors = [];
 
 drawGame = function (game) {
+
+    game.players.forEach(function (player) {
+        playerColors[player.id] = player.color;
+    });
+
     game.planets.forEach(function (planet) {
         drawPlanet(planet);
     });
 
     var currentMoves = project.getItems({ name: 'move' });
-    
+
     game.moves.forEach(function (move) {
         var match = null;
 
@@ -19,7 +25,7 @@ drawGame = function (game) {
                 currentMoves.splice(i, 1);
                 break;
             }
-        }    
+        }
 
         if (match == null) {
             drawMove(move);
@@ -45,6 +51,13 @@ function drawPlanet(planet) {
     var text = group.children['shipCount'];
 
     text.content = planet.shipCount;
+
+    if (planet.ownerPlayerId != null) {
+        circle.fillColor = playerColors[planet.ownerPlayerId];
+    }
+    else {
+        circle.fillColor = 'grey';
+    }
 };
 
 function initPlanet(planet) {
@@ -56,7 +69,7 @@ function initPlanet(planet) {
     var point = new Point(position.x, position.y);
     circle = new Path.Circle(point, planet.size / 2);
     circle.strokeColor = 'black';
-    circle.fillColor = 'green';
+    circle.fillColor = 'grey';
     circle.name = 'circle';
 
     text = new PointText(point);
@@ -87,12 +100,12 @@ function leftClick(group) {
             return value != group.gameId
         });
 
-        circle.fillColor = 'green';
+        circle.strokeColor = 'black';
         circle.isSelected = false;
     }
     else {
         currentSelection.push(group.gameId);
-        circle.fillColor = 'blue';
+        circle.strokeColor = 'yellow';
         circle.isSelected = true;
     }
 };
@@ -134,7 +147,7 @@ function initMove(move) {
 
     text = new PointText(startPoint);
     text.justification = 'center';
-    text.fillColor = 'black';
+    text.fillColor = 'red';
     text.name = 'shipCount';
     text.content = move.shipCount;
 
