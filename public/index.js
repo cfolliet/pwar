@@ -29,6 +29,7 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
     };
 })(pwar);
 
+// lobby
 (function (pw) {
     pw.lobbyViewModel = function () {
         var isVisible = ko.observable(true);
@@ -38,20 +39,22 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
 
         function onCreateGame() {
             $.post(host + '/games', { name: createGameName(), playerName: playerName() }, function (game) {
-                isVisible(false);
-                pw.gameViewModel.currentPlayerId(game.players[0].id);
-                pw.gameViewModel.game(game);
-                pw.gameViewModel.isVisible(true);
+                initGameViewModel(game);
             });
         };
 
         function onJoinGame(game, event) {
             $.post(host + '/players', { gameId: game.id, name: playerName() }, function (game) {
-                isVisible(false);
-                pw.gameViewModel.currentPlayerId(game.players[game.players.length - 1].id);
-                pw.gameViewModel.game(game);
-                pw.gameViewModel.isVisible(true);
+                initGameViewModel(game);
             });
+        };
+
+        function initGameViewModel(game) {
+            isVisible(false);
+            pw.gameViewModel.game(game);
+            pw.gameViewModel.currentPlayerId(game.players[game.players.length - 1].id);
+            pw.gameViewModel.isVisible(true);
+            pw.socketIO.emit('joinGame', game.id);
         };
 
         return {

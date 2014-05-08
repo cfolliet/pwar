@@ -58,6 +58,9 @@ app.route('/moves')
 
 io.sockets.on('connection', function (socket) {
     updateGames(engine.games);
+    socket.on('joinGame', function (gameId) {
+        socket.join(gameId);
+    });
 });
 
 function updateGames(games) {
@@ -65,7 +68,7 @@ function updateGames(games) {
 };
 
 function updateGame(game) {
-    io.sockets.emit('game', game);
+    io.sockets.in(game.id).emit('game', game);
 };
 
 server.listen(8080);
