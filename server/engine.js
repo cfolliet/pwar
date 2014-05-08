@@ -19,7 +19,7 @@ function Game(config) {
     self.addPlayer = addPlayer;
     self.setReady = setReady;
     self.addMove = addMove;
-    
+
     events.EventEmitter.call(self);
 
     init();
@@ -30,27 +30,42 @@ function Game(config) {
         if (self.planets.length == 0) {
             self.planets.push(new entities.Planet());
             self.planets.push(new entities.Planet());
+            self.planets.push(new entities.Planet());
+            self.planets.push(new entities.Planet());
+            self.planets.push(new entities.Planet());
         }
     };
 
     function addPlayer(name) {
-        var player = new entities.Player({ name: name });
+        var color = getAvailableColor();
+        var player = new entities.Player({ name: name, color: color });
         self.players.push(player);
         return player;
     };
-    
+
     function setReady(playerId) {
         var player = getPlayer(playerId);
         player.isReady = true;
-        
+
         var allReady = self.players.every(function (p) {
             return p.isReady;
         });
 
         if (allReady) {
-            self.isStarted = true;
-            setInterval(planetsGrowth, 3000);
+            startGame();
         }
+    };
+
+    function startGame() {
+        var planets = _.sample(self.planets, self.players.length);
+        self.players.forEach(function (player, index) {
+            var planet = planets[index];
+            planet.ownerPlayerId = player.id;
+            planet.shipCount = 100;
+        });
+
+        self.isStarted = true;
+        setInterval(planetsGrowth, 3000);
     };
 
     function addMove(startPlanetId, endPlanetId, shipCount) {
@@ -69,6 +84,11 @@ function Game(config) {
         setTimeout(endMove, timeTravel, move);
         self.moves.push(move);
         return move;
+    };
+
+    function getAvailableColor() {
+        var colors = ["blue", "green", "red", "orange", "pink", "violet"];
+        return _.difference(colors, self.players.map(function (player) { return player.color; }))[0];
     };
 
     function getPlayer(id) {

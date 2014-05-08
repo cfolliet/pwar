@@ -17,7 +17,7 @@ function Planet(config) {
 
     self.ownerPlayerId = config.ownerPlayerId || null;
     self.size = config.size || _.random(10, 100);
-    self.shipCount = config.shipCount || _.random(100);
+    self.shipCount = config.shipCount || _.random(50);
 };
 
 function Player(config) {
@@ -27,6 +27,7 @@ function Player(config) {
     self.id = config.id || uuid.v4();
     self.name = config.name || "no name";
     self.isReady = config.isReady || false;
+    self.color = config.color || "grey";
 }
 
 function Move(config) {
