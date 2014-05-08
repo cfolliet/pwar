@@ -52,6 +52,9 @@ function drawPlanet(planet) {
 
     text.content = planet.shipCount;
 
+    console.log(planet.ownerPlayerId == game.currentPlayerId());
+    group.isPlayer = planet.ownerPlayerId == game.currentPlayerId();
+
     if (planet.ownerPlayerId != null) {
         circle.fillColor = playerColors[planet.ownerPlayerId];
     }
@@ -68,6 +71,7 @@ function initPlanet(planet) {
     var position = planet.position;
     var point = new Point(position.x, position.y);
     circle = new Path.Circle(point, planet.size / 2);
+    circle.strokeWidth = 5;
     circle.strokeColor = 'black';
     circle.fillColor = 'grey';
     circle.name = 'circle';
@@ -93,6 +97,12 @@ function initPlanet(planet) {
 };
 
 function leftClick(group) {
+
+    if (!group.isPlayer)
+    {
+        return;
+    }
+
     var circle = group.children['circle'];
 
     if (circle.isSelected) {
@@ -112,15 +122,6 @@ function leftClick(group) {
 
 function rightClick(group) {
     game.sendMoves(currentSelection, group.gameId);
-
-    currentSelection.forEach(function (selection) {
-        var g = get(selection);
-        var c = g.children['circle'];
-        c.fillColor = 'green';
-        c.isSelected = false;
-    });
-
-    currentSelection = [];
 };
 
 function drawMove(move) {

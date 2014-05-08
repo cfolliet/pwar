@@ -61,7 +61,7 @@
                 <h1>Waiting fo players...</h1>
                 <ul data-bind="foreach: players">
                     <li>
-                        <span data-bind="text: name"></span>
+                        <span data-bind="text: name, style: { color : color }"></span>
                     </li>
                 </ul>
                 <button data-bind="click: onReady">Ready...</button>
