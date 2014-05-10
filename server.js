@@ -52,7 +52,13 @@ app.route('/moves')
     var gameId = req.body.gameId;
     var playerId = req.body.playerId;
     var game = engine.getGame(gameId);
-    res.send(game.addMove(req.body.startPlanetId, req.body.endPlanetId, parseInt(req.body.shipCount)));
+
+    var moves = [];
+    req.body.moves.forEach(function (move) {
+        moves.push(game.addMove(move.startPlanetId, move.endPlanetId, parseInt(move.shipCount)));
+    });
+
+    res.send(moves);
     updateGame(game);
 });
 

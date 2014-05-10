@@ -93,17 +93,21 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
         };
 
         function sendMoves(startPlanetIds, endPlanetId) {
+            var body = {
+                gameId: game().id,
+                moves: [],
+                playerId: currentPlayerId(),
+            };
+
             startPlanetIds.forEach(function (startPlanetId) {
-                var body = {
-                    gameId: game().id,
-                    playerId: currentPlayerId(),
+                body.moves.push({
                     startPlanetId: startPlanetId,
                     endPlanetId: endPlanetId,
                     shipCount: getPlanet(startPlanetId).shipCount / 2
-                };
-
-                $.post(host + '/moves', body);
+                });
             });
+
+            $.post(host + '/moves', body);
         };
 
         function getPlanet(id) {
@@ -124,7 +128,7 @@ var host = window.location.origin || window.location.protocol + '//' + window.lo
             currentPlayerId: currentPlayerId,
             onReady: onReady,
             isStarted: isStarted,
-            players : players,
+            players: players,
             game: game,
             sendMoves: sendMoves
         }
