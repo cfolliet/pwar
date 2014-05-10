@@ -22,20 +22,6 @@ function Game(config) {
 
     events.EventEmitter.call(self);
 
-    init();
-
-    function init() {
-        // init planets map
-        // TODO choose the way we get the map (random generate/save in db)
-        if (self.planets.length == 0) {
-            self.planets.push(new entities.Planet());
-            self.planets.push(new entities.Planet());
-            self.planets.push(new entities.Planet());
-            self.planets.push(new entities.Planet());
-            self.planets.push(new entities.Planet());
-        }
-    };
-
     function addPlayer(name) {
         var color = getAvailableColor();
         var player = new entities.Player({ name: name, color: color });
@@ -56,11 +42,40 @@ function Game(config) {
         }
     };
 
+    function generatePlanets() {
+        var attempts = 0;
+
+        for (var i = 0; i < self.players.length * 10; i++) {
+            var position = new entities.Position(_.random(50, 750), _.random(50, 550));
+            var size = _.random(30, 100)
+            var overlap = _.find(self.planets, function (p) {
+                var distanceX = Math.abs(p.position.x - position.x);
+                var distanceY = Math.abs(p.position.y - position.y);
+                var maxDistance = Math.max(distanceX, distanceY);
+                return maxDistance <= 50 + size / 2 + 10;
+            });
+
+            if (overlap) {
+                i--;
+                attempts++;
+                if (attempts >= 500) {
+                    return;
+                }
+            }
+            else {
+                self.planets.push(new entities.Planet({ position: position, size : size }));
+            }
+        }
+    }
+
     function startGame() {
+        generatePlanets();
+
         var planets = _.sample(self.planets, self.players.length);
         self.players.forEach(function (player, index) {
             var planet = planets[index];
             planet.ownerPlayerId = player.id;
+            planet.size = 100;
             planet.shipCount = 100;
         });
 
@@ -131,7 +146,9 @@ function Game(config) {
 
     function planetsGrowth() {
         self.planets.forEach(function (planet) {
-            planet.shipCount += parseInt(planet.size / 10);
+            if (planet.ownerPlayerId != null) {
+                planet.shipCount += parseInt(planet.size / 10);
+            }
         });
         self.emit('planetsGrowth', self);
     };

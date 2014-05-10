@@ -16,7 +16,7 @@ function Planet(config) {
     self.position = config.position || new Position(_.random(100, 500), _.random(100, 500));
 
     self.ownerPlayerId = config.ownerPlayerId || null;
-    self.size = config.size || _.random(10, 100);
+    self.size = config.size || _.random(20, 100);
     self.shipCount = config.shipCount || _.random(50);
 };
 
