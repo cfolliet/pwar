@@ -3,6 +3,30 @@ var game = pwar.gameViewModel;
 var currentSelection = [];
 var playerColors = [];
 
+var selector = null;
+
+function onMouseDrag(event) {
+    if (selector != null) {
+        selector.remove();
+    }
+
+    selector = new Path.Rectangle(event.downPoint, event.point);
+    selector.strokeColor = 'yellow';
+}
+
+function onMouseUp(event) {
+    if (selector != null) {
+        game.game().planets.forEach(function (planet) {
+            if (selector.contains(new Point(planet.position.x, planet.position.y))) {
+                leftClick(get(planet.id));
+            }
+        });
+
+        selector.remove();
+        selector = null;
+    }
+}
+
 drawGame = function (game) {
 
     game.players.forEach(function (player) {
@@ -52,7 +76,6 @@ function drawPlanet(planet) {
 
     text.content = planet.shipCount;
 
-    console.log(planet.ownerPlayerId == game.currentPlayerId());
     group.isPlayer = planet.ownerPlayerId == game.currentPlayerId();
 
     if (planet.ownerPlayerId != null) {
@@ -98,8 +121,7 @@ function initPlanet(planet) {
 
 function leftClick(group) {
 
-    if (!group.isPlayer)
-    {
+    if (!group.isPlayer) {
         return;
     }
 
